@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Factura - Property Investors</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js"></script>
+
+
+
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h2>Menú</h2>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="clients.html">Clientes</a></li>
+                <li><a href="invoices.html">Cuentas por Cobrar</a></li>
+                <li><a href="history.html">Historial</a></li>
+                <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+
+            </ul>
+        </nav>
+        <main class="content">
+            <div class="title-container">
+                <h1>Crear Facturas</h1>
+                <img src="/img/propertylogo.png" alt="Property Investors SAS" class="title-img">
+            </div>
+            <form id="invoice-form" class="form-container">
+                <label for="client" class="form-label">Cliente:</label>
+                <select id="client" class="form-input" required>
+                    <option value="">Selecciona un cliente</option>
+                </select>
+            
+                <label for="rent_amount" class="form-label">Valor de Arriendo (COP):</label>
+                <input type="number" id="rent_amount" class="form-input" placeholder="Monto del arriendo" required>
+            
+                <label for="services_amount" class="form-label">Valor de Servicios Públicos (COP):</label>
+                <input type="number" id="services_amount" class="form-input" placeholder="Monto del consumo de energía" required>
+            
+                <label for="due_date" class="form-label">Fecha de Creación:</label>
+                <input type="date" id="due_date" class="form-input" required>
+            
+                <button type="submit" class="btn-primary">Generar Factura</button>
+            </form>
+            
+        </main>
+    </div>
+    <script src="../js/invoices.js"></script>
+</body>
+</html>

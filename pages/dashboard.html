@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- For Revenue Chart -->
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <h2>Menú</h2>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="clients.html">Clientes</a></li>
+                <li><a href="invoices.html">Cuentas por Cobrar</a></li>
+                <li><a href="history.html">Historial</a></li>
+                <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="title-container">
+                <h1>Dashboard</h1>
+                <img src="/img/propertylogo.png" alt="Property Investors SAS" class="title-img">
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="stats">
+                <div class="card">
+                    <p id="total-invoiced">0</p>
+                    <h3>Total Facturado (Este Mes)</h3>
+                </div>
+                <div class="card">
+                    <p id="total-paid">0</p>
+                    <h3>Total Pagado (Este Mes)</h3>
+                </div>
+                <div class="card">
+                    <p id="active-clients">0</p>
+                    <h3>Clientes Activos</h3>
+                </div>
+                <div class="card">
+                    <p id="avg-stay">0</p>
+                    <h3>Promedio de Estadía (Meses)</h3>
+                </div>
+            </div>
+
+            <!-- Revenue Chart -->
+            <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>

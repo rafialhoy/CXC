@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingreso - Property Investors SAS</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+    <div class="login-screen">
+    <div class="login-container">
+        <img src="img/propertylogo.png" alt="Property Investors SaS Logo" class="login-img">
+        <h2>Acceso a la Plataforma</h2>
+        <input type="password" id="password" class="form-input" placeholder="Ingrese la contraseña">
+        <button onclick="verifyPassword()" class="btn-primary">Entrar</button>
+        <p id="error-msg" class="hidden">Contraseña incorrecta</p>
+    </div>
+</div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>
