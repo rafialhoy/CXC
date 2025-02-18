@@ -177,12 +177,13 @@ h1 {
 }
 
 /* Chart Container */
-.chart-container {
+.chart-container-line {
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
+    height: 300px;
 }
 
 
@@ -343,12 +344,13 @@ button {
     margin-top: 15px;
 }
 
-.table-container {
+.table-container-scroll {
     background: white;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
+    overflow: scroll;
 }
 
 table {
@@ -381,6 +383,72 @@ td .delete-btn {
 
 td .delete-btn:hover {
     background: #c82333;
+}
+
+
+/* Custom Alert Modal */
+.custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+    z-index: 1000;
+    display: none; /* Hidden by default */
+}
+
+.custom-alert h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.custom-alert p {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.custom-alert button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.custom-alert button:hover {
+    background: #0056b3;
+}
+
+/* Overlay Background */
+.alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: none; /* Hidden by default */
+    z-index: 999;
+}
+
+
+.chart-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    height: 500px; /* Adjusted for better readability */
 }
 
 

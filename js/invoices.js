@@ -50,7 +50,7 @@ document.getElementById("invoice-form").addEventListener("submit", async (e) => 
     const dueDate = document.getElementById("due_date").value;
 
     if (!clientId || !rentAmount || !servicesAmount || !dueDate) {
-        alert("Todos los campos son obligatorios");
+        showAlert("Error", "Todos los campos son obligatorios");
         return;
     }
 
@@ -59,13 +59,16 @@ document.getElementById("invoice-form").addEventListener("submit", async (e) => 
     // Fetch client data
     const { data: clientData, error: clientError } = await supabase
         .from("clients")
-        .select("*")
+        .select(`
+            id, name, email, phone, identification,
+            properties(name)
+        `)
         .eq("id", clientId)
         .single();
 
     if (clientError || !clientData) {
         console.error("Error fetching client details:", clientError);
-        alert("No se pudo obtener la información del cliente.");
+        showAlert("Error", "No se pudo obtener la información del cliente.");
         return;
     }
 
@@ -104,9 +107,9 @@ document.getElementById("invoice-form").addEventListener("submit", async (e) => 
 
     if (insertError) {
         console.error("Error saving invoice:", insertError);
-        alert("Error al guardar la factura en la base de datos.");
+        showAlert("Error","Error al guardar la factura en la base de datos.");
     } else {
-        alert("Factura generada y guardada con éxito.");
+        showAlert("Éxito", "Factura generada y guardada con éxito.");
         document.getElementById("invoice-form").reset();
     }
 });
@@ -131,6 +134,10 @@ const logoY = 10; // Adjust Y position as needed
 // Add centered logo
 doc.addImage(logoURL, "PNG", logoX, logoY, logoWidth, logoHeight);
 
+const propertyName = client.properties?.name || "Propiedad Desconocida"; // Fallback if missing
+
+
+
     // Company Information
     const companyInfo = {
         name: "Office Space 96 SaS",
@@ -153,37 +160,39 @@ doc.addImage(logoURL, "PNG", logoX, logoY, logoWidth, logoHeight);
     doc.setFontSize(21);
     doc.text(`Cuenta de Cobro #${invoiceNumber}`, pageWidth / 2, 50, { align: "center" });
 
-    doc.setFontSize(14);
+    doc.setFontSize(21);
     doc.text(`${client.name}`, pageWidth / 2, 75, { align: "center" });
-    doc.text(`${client.identification}`, pageWidth / 2, 80, { align: "center" });
+    doc.text(`${client.identification}`, pageWidth / 2, 85, { align: "center" });
 
     doc.setFontSize(8);
-    doc.text("DEBE A:", pageWidth / 2, 95, { align: "center" });
+    doc.text("DEBE A:", pageWidth / 2, 100, { align: "center" });
     doc.setFont("helvetica", "bold");
 
-    doc.setFontSize(14);
-    doc.text(`${companyInfo.name}`, pageWidth / 2, 110, { align: "center" });
-    doc.text(`NIT. ${companyInfo.nit}`, pageWidth / 2, 115, { align: "center" });
+    doc.setFontSize(21);
+    doc.text(`${companyInfo.name}`, pageWidth / 2, 115, { align: "center" });
+    doc.text(`NIT. ${companyInfo.nit}`, pageWidth / 2, 125, { align: "center" });
 
     doc.setFontSize(8);
-    doc.text("LA SUMA DE:", pageWidth / 2, 135, { align: "center" });
+    doc.text("LA SUMA DE:", pageWidth / 2, 140, { align: "center" });
 
-    doc.setFontSize(14);
-    doc.text(`$${(parseFloat(rentAmount) + parseFloat(servicesAmount)).toLocaleString()}`, pageWidth / 2, 150, { align: "center" });
+    doc.setFontSize(21);
+    doc.text(`$${(parseFloat(rentAmount) + parseFloat(servicesAmount)).toLocaleString()}`, pageWidth / 2, 155, { align: "center" });
+
+
 
     // Table with Rent & Services Breakdown
     doc.autoTable({
         startY: 165,
         head: [["Concepto", "Valor", "Cantidad", "Total"]],
         body: [
-            ["ARRIENDO", `$${parseFloat(rentAmount).toLocaleString()}`, "1", `$${parseFloat(rentAmount).toLocaleString()}`],
-            ["CONSUMO ENERGIA", `$${parseFloat(servicesAmount).toLocaleString()}`, "1", `$${parseFloat(servicesAmount).toLocaleString()}`],
+            [`Arriendo - ${propertyName}`, `$${parseFloat(rentAmount).toLocaleString()}`, "1", `$${parseFloat(rentAmount).toLocaleString()}`],
+            ["Consumo Servicios", `$${parseFloat(servicesAmount).toLocaleString()}`, "1", `$${parseFloat(servicesAmount).toLocaleString()}`],
         ],
         foot: [["TOTAL", "", "", `$${(parseFloat(rentAmount) + parseFloat(servicesAmount)).toLocaleString()}`]],
         theme: "grid",
         headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] }, // Black header, White text
     footStyles: { fillColor: [0, 123, 255], textColor: [255, 255, 255], fontStyle: "bold" }, // TOTAL row (Blue background, White text)
-    styles: { fontSize: 10, cellPadding: 5 }
+    styles: { fontSize: 9, cellPadding: 5 }
     });
 
     // Payment Details (Centered)
@@ -201,12 +210,24 @@ doc.addImage(logoURL, "PNG", logoX, logoY, logoWidth, logoHeight);
     doc.text(`C.C. ${companyInfo.cedula}`, 20, finalY + 40);
     doc.text(`Teléfono ${companyInfo.phone}`, 20, finalY + 45);
 
-    doc.save(`Factura-${invoiceNumber}.pdf`);
+    doc.save(`CuentaXCobrar-${invoiceNumber}.pdf`);
 }
 
 
 
+// Show Custom Alert
+function showAlert(title, message) {
+    document.getElementById("alert-title").textContent = title;
+    document.getElementById("alert-message").textContent = message;
+    document.getElementById("custom-alert").style.display = "block";
+    document.getElementById("alert-overlay").style.display = "block";
+}
 
+// Close Custom Alert
+function closeAlert() {
+    document.getElementById("custom-alert").style.display = "none";
+    document.getElementById("alert-overlay").style.display = "none";
+}
 
 
 

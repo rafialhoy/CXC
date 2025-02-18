@@ -51,8 +51,24 @@
             </div>
 
             <!-- Revenue Chart -->
-            <div class="chart-container">
+            <div class="chart-container-line">
                 <canvas id="revenueChart"></canvas>
+            </div>
+
+            <div class="table-container-scroll">
+                <h2>Ingresos Totales por Propiedad</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Propiedad</th>
+                            <th>Ingresos Totales ($)</th>
+                            <th>Inquilino Activo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="property-revenue-list">
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

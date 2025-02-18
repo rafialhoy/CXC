@@ -46,7 +46,10 @@
                     <input type="number" id="identification" placeholder="Número de identificación" required>
 
                     <label for="property">Propiedad:</label>
-                    <input type="text" id="property" placeholder="Ej: Apartamento 302" required>
+                    <select id="property" class="form-input">
+                        <option value="">Cargando propiedades...</option>
+                    </select>
+                    
 
                     <label for="start_date">Fecha de Inicio:</label>
                     <input type="date" id="start_date" required>
@@ -54,7 +57,7 @@
                     <label for="end_date">Fecha de Fin (Opcional):</label>
                     <input type="date" id="end_date">
 
-                    <button type="submit">Agregar Cliente</button>
+                    <button id="add-client-btn" type="button" >Agregar Cliente</button>
                 </form>
             </div>
 
@@ -82,6 +85,14 @@
         </div>
     </div>
 
+
+    <!-- Custom Alert Modal -->
+<div class="alert-overlay" id="alert-overlay"></div>
+<div class="custom-alert" id="custom-alert">
+    <h3 id="alert-title">Alert</h3>
+    <p id="alert-message">This is a message.</p>
+    <button onclick="closeAlert()">OK</button>
+</div>
     <script src="../js/clients.js"></script>
 </body>
 </html>

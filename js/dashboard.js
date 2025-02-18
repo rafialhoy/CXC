@@ -137,6 +137,109 @@ async function loadRevenueChart() {
     });
 }
 
+async function loadPropertyRevenueChart() {
+    console.log("📡 Fetching property revenue and active tenants...");
+
+    // Fetch invoices to get revenue per property
+    const { data: revenueData, error: revenueError } = await supabase
+        .from("invoices")
+        .select("client_id, rent_amount, services_amount");
+
+    if (revenueError) {
+        console.error("❌ Error fetching revenue data:", revenueError);
+        return;
+    }
+
+    // Fetch active clients (tenants) and their assigned properties
+    const { data: clientsData, error: clientsError } = await supabase
+        .from("clients")
+        .select("id, name, property_id, end_date");
+
+    if (clientsError) {
+        console.error("❌ Error fetching clients:", clientsError);
+        return;
+    }
+
+    // Fetch all properties with their names
+    const { data: propertiesData, error: propertiesError } = await supabase
+        .from("properties")
+        .select("id, name");
+
+    if (propertiesError) {
+        console.error("❌ Error fetching properties:", propertiesError);
+        return;
+    }
+
+    // Mapping: Client ID → Property ID & Name
+    const clientToPropertyMap = {};
+    clientsData.forEach(client => {
+        clientToPropertyMap[client.id] = {
+            property_id: client.property_id,
+            name: client.name,
+            isActive: !client.end_date || new Date(client.end_date) > new Date() // Check if rental is still active
+        };
+    });
+
+    // Mapping: Property ID → Property Name & Active Tenant
+    const propertyRevenue = {};
+    propertiesData.forEach(property => {
+        propertyRevenue[property.id] = { 
+            name: property.name, 
+            totalRevenue: 0, 
+            tenant: "Vacante" // Default value
+        };
+    });
+
+    // Calculate revenue per property and assign tenants
+    revenueData.forEach(invoice => {
+        const tenant = clientToPropertyMap[invoice.client_id];
+        if (tenant && tenant.isActive) {
+            const propertyId = tenant.property_id;
+            if (propertyRevenue[propertyId]) {
+                propertyRevenue[propertyId].totalRevenue += 
+                    parseFloat(invoice.rent_amount) + parseFloat(invoice.services_amount);
+                propertyRevenue[propertyId].tenant = tenant.name; // Assign active tenant
+            }
+        }
+    });
+
+    // Convert object to sorted array
+    const sortedProperties = Object.values(propertyRevenue).sort((a, b) => b.totalRevenue - a.totalRevenue);
+
+    console.log("📊 Sorted Properties Revenue:", sortedProperties);
+
+    // Update the table in the dashboard
+    updateRevenueTable(sortedProperties);
+}
+
+
+function updateRevenueTable(sortedProperties) {
+    const tableBody = document.getElementById("property-revenue-list");
+    tableBody.innerHTML = ""; // Clear previous data
+
+    sortedProperties.forEach(property => {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${property.name}</td>
+            <td>$${property.totalRevenue.toLocaleString()}</td>
+            <td>${property.tenant ? property.tenant : "Vacante"}</td>
+
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+
+
+// Load data when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+    loadPropertyRevenueChart();
+});
+
+
+
+
+
 function logout() {
     localStorage.removeItem("isAuthenticated");
     window.location.href = "../index.html";
